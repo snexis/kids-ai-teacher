@@ -1,1 +1,54 @@
-hi,
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বাচ্চাদের এআই শিক্ষক</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f8ff; padding: 20px; text-align: center; }
+        .chat-box { max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        input { width: 70%; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; }
+        button { padding: 10px 15px; font-size: 16px; background-color: #ff6f61; color: white; border: none; border-radius: 6px; cursor: pointer; }
+        #response { margin-top: 20px; font-size: 17px; color: #333; text-align: left; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+    <div class="chat-box">
+        <h2>🎈 এআই শিক্ষক 🎈</h2>
+        <p>যেকোনো প্রশ্ন করো, সহজ করে বুঝিয়ে দেব!</p>
+        <input type="text" id="userInput" placeholder="যেমন: চাঁদ রাতে আলো দেয় কেন?">
+        <button onclick="askAI()">উত্তর দাও</button>
+        <div id="response"></div>
+    </div>
+
+    <script>
+        async function askAI() {
+            const prompt = document.getElementById('userInput').value;
+            const responseDiv = document.getElementById('response');
+            const apiKey = "YOUR_GEMINI_API_KEY"; // এখানে আপনার API Key বসাবেন
+
+            if (!prompt) return alert("একটি প্রশ্ন লেখো!");
+            responseDiv.innerHTML = "ভাবছি... 🤔";
+
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: "তুমি শিশুদের একজন সহজ-সরল ও ধৈর্যশীল শিক্ষক। খুবই সহজ বাংলা ভাষায় গল্প ও সহজ উদাহরণ দিয়ে উত্তর দাও। প্রশ্ন: " + prompt }]
+                        }]
+                    })
+                });
+                const data = await res.json();
+                const aiReply = data.candidates[0].content.parts[0].text;
+                responseDiv.innerHTML = "<strong>উত্তর:</strong><br>" + aiReply.replace(/\n/g, '<br>');
+            } catch (err) {
+                responseDiv.innerHTML = "দুঃখিত! কোনো সমস্যা হয়েছে। আবার চেষ্টা করো।";
+            }
+        }
+    </script>
+
+</body>
+</html>
