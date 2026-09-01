@@ -4,413 +4,503 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>বাচ্চাদের এআই শিক্ষক</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4CAF50;
-            --secondary-color: #2196F3;
-            --bg-color: #f0f8ff;
-            --text-color: #333;
-            --card-bg: #fff;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --chat-bg: #f3f4f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
+            background: var(--bg-gradient);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            color: var(--text-color);
+            padding: 12px;
         }
 
-        .container {
-            background-color: var(--card-bg);
-            padding: 2rem;
+        .card {
+            background: var(--card-bg);
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 90%;
-            max-width: 400px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Login Screen */
+        .login-body {
+            padding: 2.5rem 2rem;
             text-align: center;
-            box-sizing: border-box;
         }
 
-        @media (max-width: 360px) {
-            .container { padding: 1.5rem; }
-            h2 { font-size: 1.5rem; }
+        .app-icon {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        h2 {
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
+        .login-title {
+            color: var(--text-main);
             font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .login-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
         }
 
         .input-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
             text-align: left;
         }
 
-        label {
+        .input-group label {
             display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-            color: #555;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.4rem;
         }
 
-        input[type="text"],
-        input[type="password"] {
+        .input-field {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            box-sizing: border-box;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
             font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        input:focus {
             outline: none;
-            border-color: var(--secondary-color);
+            transition: all 0.2s;
         }
 
-        .btn {
+        .input-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+        .btn-main {
             width: 100%;
             padding: 12px;
+            background: var(--primary);
+            color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 1.1rem;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
-            margin-top: 1rem;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .btn-primary:hover { background-color: #43a047; }
-        .btn-primary:active { transform: scale(0.98); }
-
-        .btn-secondary {
-            background-color: #f44336;
-            color: white;
+            transition: background 0.2s;
             margin-top: 0.5rem;
         }
 
-        #teacher-interface { display: none; }
-        
-        .chat-container {
-            width: 90%;
-            max-width: 500px;
-            display: flex;
-            flex-direction: column;
-            height: 85vh;
+        .btn-main:hover {
+            background: var(--primary-hover);
         }
 
-        #chat-window {
+        .msg-box {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* App Main Chat Screen */
+        #app-interface {
+            display: none;
+            height: 88vh;
+            max-height: 700px;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: #ffffff;
+            padding: 1rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .nav-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn-nav {
+            background: #f3f4f6;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+            transition: background 0.2s;
+        }
+
+        .icon-btn-nav:hover {
+            background: #e5e7eb;
+        }
+
+        .chat-area {
             flex: 1;
-            overflow-y: auto;
             padding: 1rem;
-            border: 1px solid #eee;
-            border-radius: 10px;
-            background: #fafafa;
-            margin-bottom: 1rem;
+            background: var(--chat-bg);
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
+            gap: 12px;
         }
 
-        .message {
-            margin-bottom: 1rem;
-            padding: 10px 15px;
-            border-radius: 10px;
-            max-width: 80%;
+        .bubble {
+            max-width: 82%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.98rem;
+            line-height: 1.4;
             word-wrap: break-word;
         }
 
-        .user-message {
-            background-color: #e3f2fd;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-        }
-
-        .ai-message {
-            background-color: #e8f5e9;
+        .bubble-ai {
+            background: white;
+            color: var(--text-main);
             align-self: flex-start;
-            border-bottom-left-radius: 2px;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        .input-area {
+        .bubble-user {
+            background: var(--primary);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-input-bar {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #e5e7eb;
             display: flex;
-            gap: 8px;
             align-items: center;
+            gap: 8px;
         }
 
-        #user-input {
+        .chat-input {
             flex: 1;
-            padding: 10px;
-            border: 2px solid #ddd;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
             border-radius: 20px;
+            font-size: 0.95rem;
+            outline: none;
         }
 
-        .icon-btn {
+        .chat-input:focus {
+            border-color: var(--primary);
+        }
+
+        .action-btn {
             background: none;
             border: none;
+            font-size: 1.3rem;
             cursor: pointer;
-            font-size: 1.4rem;
-            color: #777;
-            padding: 5px;
+            padding: 6px;
+            border-radius: 50%;
+            transition: transform 0.1s;
         }
 
-        .icon-btn.recording { color: red; animation: pulse 1s infinite; }
+        .action-btn:active {
+            transform: scale(0.9);
+        }
+
+        .action-btn.recording {
+            color: red;
+            animation: pulse 1s infinite;
+        }
 
         @keyframes pulse {
             0% { opacity: 1; }
-            50% { opacity: 0.5; }
+            50% { opacity: 0.4; }
             100% { opacity: 1; }
         }
 
-        #image-preview {
-            max-width: 80px;
-            max-height: 80px;
+        #img-preview-container {
+            padding: 8px 1rem 0 1rem;
+            background: white;
             display: none;
-            margin-top: 5px;
-            border-radius: 10px;
+        }
+
+        #img-preview {
+            max-height: 70px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
         }
     </style>
 </head>
 <body>
 
-    <div id="login-interface" class="container">
-        <h2 id="login-title">🔒 প্রথমবার সেটআপ</h2>
-        
-        <div class="input-group">
-            <label for="reg-id">লগইন আইডি:</label>
-            <input type="text" id="reg-id" placeholder="যেমন: kid123">
-        </div>
-        
-        <div class="input-group">
-            <label for="reg-pass">পাসওয়ার্ড দিন:</label>
-            <input type="password" id="reg-pass" placeholder="****">
-        </div>
+    <div id="login-interface" class="card">
+        <div class="login-body">
+            <div class="app-icon">🧑‍🏫</div>
+            <h2 id="login-title" class="login-title">স্বাগতম!</h2>
+            <p id="login-subtitle" class="login-subtitle">বাচ্চাদের এআই শিক্ষকে লগইন করো</p>
+            
+            <div class="input-group">
+                <label for="user-id">লগইন আইডি</label>
+                <input type="text" id="user-id" class="input-field" placeholder="যেমন: kid123">
+            </div>
+            
+            <div class="input-group">
+                <label for="user-pass">পাসওয়ার্ড</label>
+                <input type="password" id="user-pass" class="input-field" placeholder="••••••••">
+            </div>
 
-        <button id="auth-btn" class="btn btn-primary">সেটআপ করো</button>
-        <button id="logout-clear-btn" class="btn btn-secondary" style="display: none;">লগআউট ও আইডি মুছুন</button>
-        <p id="login-msg" style="color: red; margin-top: 10px;"></p>
+            <button id="auth-btn" class="btn-main">প্রবেশ করো</button>
+            <div id="login-msg" class="msg-box"></div>
+        </div>
     </div>
 
-    <div id="teacher-interface" class="container chat-container">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <h2 style="margin: 0;">🧑‍🏫 এআই শিক্ষক</h2>
-            <button id="exit-btn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;" title="লগআউট">🚪</button>
-        </div>
-        
-        <div id="chat-window">
-            <div class="message ai-message">হ্যালো! আমি তোমার এআই শিক্ষক। যেকোনো প্রশ্ন করতে পারো, ছবি দেখাতে পারো বা মুখে বলেও জিজ্ঞেস করতে পারো!</div>
+    <div id="app-interface" class="card">
+        <div class="navbar">
+            <div class="nav-title">
+                <span>🎓</span> এআই শিক্ষক
+            </div>
+            <div class="nav-actions">
+                <button id="reset-account-btn" class="icon-btn-nav" title="আইডি রিসেট">⚙️ রিসেট</button>
+                <button id="logout-btn" class="icon-btn-nav" style="color: #ef4444;" title="লগআউট">🚪 বের হও</button>
+            </div>
         </div>
 
-        <img id="image-preview" src="#" alt="ছবি প্রিভিউ">
+        <div id="chat-window" class="chat-area">
+            <div class="bubble bubble-ai">
+                নমস্কার! আমি তোমার এআই শিক্ষক। যেকোনো পড়ালেখা সংক্রান্ত প্রশ্ন করতে পারো, বইয়ের ছবির তুলে দেখাতে পারো বা মুখে বলেও জিজ্ঞেস করতে পারো!
+            </div>
+        </div>
 
-        <div class="input-area">
-            <input type="text" id="user-input" placeholder="প্রশ্ন লেখো...">
-            <button id="voice-btn" class="icon-btn" title="ভয়েস টাইপ">🎙️</button>
-            <label for="image-input" class="icon-btn" title="ছবি তোলো">📷</label>
-            <input type="file" id="image-input" accept="image/*" style="display: none;">
-            <button id="send-btn" class="icon-btn" style="color: var(--primary-color);">➡️</button>
+        <div id="img-preview-container">
+            <img id="img-preview" src="#" alt="Preview">
+        </div>
+
+        <div class="chat-input-bar">
+            <input type="text" id="user-prompt" class="chat-input" placeholder="প্রশ্ন লেখো...">
+            
+            <button id="voice-btn" class="action-btn" title="ভয়েস ইনপুট">🎙️</button>
+            
+            <label for="file-input" class="action-btn" title="ছবি তোলো">📷</label>
+            <input type="file" id="file-input" accept="image/*" style="display: none;">
+
+            <button id="send-btn" class="action-btn" style="color: var(--primary);">➔</button>
         </div>
     </div>
 
     <script>
-        // আপনার Netlify Function-এর সঠিক লিঙ্ক দিন
-        const NETLIFY_FUNCTION_URL = "https://classy-smakager-ea0164.netlify.app/.netlify/functions/gemini";
+        // Netlify relative URL - (CORS error প্রতিরোধ করার জন্য)
+        const NETLIFY_URL = "/.netlify/functions/gemini";
 
+        // Elements
         const loginInterface = document.getElementById('login-interface');
-        const teacherInterface = document.getElementById('teacher-interface');
+        const appInterface = document.getElementById('app-interface');
         const loginTitle = document.getElementById('login-title');
-        const regIdInput = document.getElementById('reg-id');
-        const regPassInput = document.getElementById('reg-pass');
+        const loginSubtitle = document.getElementById('login-subtitle');
+        const userIdInput = document.getElementById('user-id');
+        const userPassInput = document.getElementById('user-pass');
         const authBtn = document.getElementById('auth-btn');
-        const logoutClearBtn = document.getElementById('logout-clear-btn');
         const loginMsg = document.getElementById('login-msg');
-        const exitBtn = document.getElementById('exit-btn');
+        
+        const logoutBtn = document.getElementById('logout-btn');
+        const resetAccountBtn = document.getElementById('reset-account-btn');
+        
+        const chatWindow = document.getElementById('chat-window');
+        const userPrompt = document.getElementById('user-prompt');
+        const sendBtn = document.getElementById('send-btn');
+        const voiceBtn = document.getElementById('voice-btn');
+        const fileInput = document.getElementById('file-input');
+        const imgPreviewContainer = document.getElementById('img-preview-container');
+        const imgPreview = document.getElementById('img-preview');
 
-        function checkAuthStatus() {
-            const storedUser = localStorage.getItem('kids_teacher_user');
-            if (storedUser) {
-                loginTitle.textContent = "👋 স্বাগতম!";
+        let selectedBase64Image = null;
+
+        // Auth Check
+        function checkAppAuth() {
+            const savedData = localStorage.getItem('ai_teacher_credentials');
+            if (savedData) {
+                loginTitle.textContent = "আবার স্বাগতম!";
+                loginSubtitle.textContent = "তোমার আইডি ও পাসওয়ার্ড দিয়ে প্রবেশ করো";
                 authBtn.textContent = "লগইন করো";
-                logoutClearBtn.style.display = "block";
             } else {
-                loginTitle.textContent = "🔒 প্রথমবার সেটআপ";
-                authBtn.textContent = "সেটআপ করো";
-                logoutClearBtn.style.display = "none";
+                loginTitle.textContent = "প্রথমবার সেটআপ";
+                loginSubtitle.textContent = "বাচ্চার জন্য একটি আইডি ও পাসওয়ার্ড তৈরি করো";
+                authBtn.textContent = "তৈরি ও শুরু করো";
             }
         }
-
-        checkAuthStatus();
+        checkAppAuth();
 
         authBtn.addEventListener('click', () => {
-            const id = regIdInput.value.trim();
-            const pass = regPassInput.value.trim();
-            const storedUser = localStorage.getItem('kids_teacher_user');
+            const id = userIdInput.value.trim();
+            const pass = userPassInput.value.trim();
+            const savedData = localStorage.getItem('ai_teacher_credentials');
 
             if (!id || !pass) {
-                loginMsg.textContent = "আইডি এবং পাসওয়ার্ড দুটিই দাও।";
+                loginMsg.style.color = "#ef4444";
+                loginMsg.textContent = "আইডি এবং পাসওয়ার্ড উভয়টি পূরণ করো।";
                 return;
             }
 
-            if (storedUser) {
-                const user = JSON.parse(storedUser);
-                if (user.id === id && user.pass === pass) {
+            if (savedData) {
+                const creds = JSON.parse(savedData);
+                if (creds.id === id && creds.pass === pass) {
                     loginInterface.style.display = "none";
-                    teacherInterface.style.display = "flex";
+                    appInterface.style.display = "flex";
                     loginMsg.textContent = "";
                 } else {
-                    loginMsg.textContent = "ভুল আইডি বা পাসওয়ার্ড!";
+                    loginMsg.style.color = "#ef4444";
+                    loginMsg.textContent = "ভুল আইডি বা পাসওয়ার্ড!";
                 }
             } else {
-                const newUser = { id, pass };
-                localStorage.setItem('kids_teacher_user', JSON.stringify(newUser));
-                loginMsg.style.color = "green";
-                loginMsg.textContent = "সেটআপ সফল! এখন লগইন বোতামে ক্লিক করো।";
-                regIdInput.value = "";
-                regPassInput.value = "";
-                checkAuthStatus();
+                localStorage.setItem('ai_teacher_credentials', JSON.stringify({ id, pass }));
+                loginMsg.style.color = "#10b981";
+                loginMsg.textContent = "সফলভাবে তৈরি হয়েছে! এখন লগইন করো।";
+                checkAppAuth();
             }
         });
 
-        logoutClearBtn.addEventListener('click', () => {
-            localStorage.removeItem('kids_teacher_user');
-            regIdInput.value = "";
-            regPassInput.value = "";
-            loginMsg.style.color = "red";
-            loginMsg.textContent = "আইডি ও পাসওয়ার্ড মুছে ফেলা হয়েছে। নতুন সেটআপ করুন।";
-            checkAuthStatus();
-        });
-
-        exitBtn.addEventListener('click', () => {
-            teacherInterface.style.display = "none";
+        // Logout Button Logic
+        logoutBtn.addEventListener('click', () => {
+            appInterface.style.display = "none";
             loginInterface.style.display = "block";
+            userPassInput.value = "";
         });
 
-        // Chat & API Integration
-        const chatWindow = document.getElementById('chat-window');
-        const userInput = document.getElementById('user-input');
-        const sendBtn = document.getElementById('send-btn');
-        const voiceBtn = document.getElementById('voice-btn');
-        const imageInput = document.getElementById('image-input');
-        const imagePreview = document.getElementById('image-preview');
+        // Account Reset Logic inside Navbar
+        resetAccountBtn.addEventListener('click', () => {
+            if (confirm("তুমি কি নতুন করে আইডি পাসওয়ার্ড সেটআপ করতে চাও?")) {
+                localStorage.removeItem('ai_teacher_credentials');
+                location.reload();
+            }
+        });
 
-        let selectedImageBase64 = null;
-
-        imageInput.addEventListener('change', (e) => {
+        // Image Selection
+        fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = (event) => {
-                selectedImageBase64 = event.target.result.split(',')[1];
-                imagePreview.src = event.target.result;
-                imagePreview.style.display = "block";
+            reader.onload = (evt) => {
+                selectedBase64Image = evt.target.result.split(',')[1];
+                imgPreview.src = evt.target.result;
+                imgPreviewContainer.style.display = "block";
             };
             reader.readAsDataURL(file);
         });
 
+        // Voice Input
         if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'bn-BD';
+            const rec = new SpeechRecognition();
+            rec.lang = 'bn-BD';
 
             voiceBtn.addEventListener('click', () => {
-                if (voiceBtn.classList.contains('recording')) {
-                    recognition.stop();
-                } else {
-                    recognition.start();
-                }
+                if (voiceBtn.classList.contains('recording')) rec.stop();
+                else rec.start();
             });
 
-            recognition.onstart = () => {
-                voiceBtn.classList.add('recording');
-                voiceBtn.textContent = "🛑";
-            };
-
-            recognition.onend = () => {
-                voiceBtn.classList.remove('recording');
-                voiceBtn.textContent = "🎙️";
-            };
-
-            recognition.onresult = (event) => {
-                userInput.value = event.results[0][0].transcript;
-            };
+            rec.onstart = () => voiceBtn.classList.add('recording');
+            rec.onend = () => voiceBtn.classList.remove('recording');
+            rec.onresult = (e) => userPrompt.value = e.results[0][0].transcript;
         } else {
             voiceBtn.style.display = "none";
         }
 
-        sendBtn.addEventListener('click', sendMessage);
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
+        // Send Message
+        sendBtn.addEventListener('click', handleSend);
+        userPrompt.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
 
-        async function sendMessage() {
-            const prompt = userInput.value.trim();
-            if (!prompt && !selectedImageBase64) return;
+        async function handleSend() {
+            const text = userPrompt.value.trim();
+            if (!text && !selectedBase64Image) return;
 
-            appendMessage('user', prompt, selectedImageBase64 ? imagePreview.src : null);
-            userInput.value = '';
-            imagePreview.style.display = "none";
-            const currentImage = selectedImageBase64;
-            selectedImageBase64 = null;
+            appendBubble('user', text, selectedBase64Image ? imgPreview.src : null);
+            userPrompt.value = '';
+            imgPreviewContainer.style.display = "none";
+            
+            const currentImg = selectedBase64Image;
+            selectedBase64Image = null;
 
-            const loadingMsg = appendMessage('ai', 'ভেবে বলছি...');
+            const loadingBubble = appendBubble('ai', 'উত্তর তৈরি করছি...');
 
             try {
-                const response = await fetch(NETLIFY_FUNCTION_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ prompt, image: currentImage })
+                const res = await fetch(NETLIFY_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: text, image: currentImg })
                 });
 
-                const data = await response.json();
-                loadingMsg.remove();
+                const data = await res.json();
+                loadingBubble.remove();
 
-                if (!response.ok) {
-                    appendMessage('ai', 'সমস্যা: ' + (data.error || 'অজানা এরর'));
+                if (!res.ok) {
+                    appendBubble('ai', 'ত্রুটি: ' + (data.error || 'উত্তর পাওয়া যায়নি'));
                     return;
                 }
 
-                const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "উত্তর পাওয়া যায়নি।";
-                appendMessage('ai', aiText);
+                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "দুঃখিত, কোনো উত্তর পাওয়া যায়নি।";
+                appendBubble('ai', reply);
 
-            } catch (error) {
-                loadingMsg.remove();
-                appendMessage('ai', 'নেটওয়ার্ক সমস্যা। আবার চেষ্টা করো।');
+            } catch (err) {
+                loadingBubble.remove();
+                appendBubble('ai', 'নেটওয়ার্ক সংযোগে সমস্যা হয়েছে।');
             }
         }
 
-        function appendMessage(sender, text, imgSrc = null) {
-            const msgDiv = document.createElement('div');
-            msgDiv.classList.add('message', sender === 'user' ? 'user-message' : 'ai-message');
+        function appendBubble(sender, text, imageSrc = null) {
+            const div = document.createElement('div');
+            div.classList.add('bubble', sender === 'user' ? 'bubble-user' : 'bubble-ai');
 
-            if (imgSrc) {
+            if (imageSrc) {
                 const img = document.createElement('img');
-                img.src = imgSrc;
+                img.src = imageSrc;
                 img.style.maxWidth = "100%";
                 img.style.borderRadius = "8px";
-                img.style.marginBottom = "5px";
-                msgDiv.appendChild(img);
+                img.style.marginBottom = "6px";
+                div.appendChild(img);
             }
 
             if (text) {
-                const textNode = document.createElement('span');
-                textNode.textContent = text;
-                msgDiv.appendChild(textNode);
+                const span = document.createElement('span');
+                span.textContent = text;
+                div.appendChild(span);
             }
 
-            chatWindow.appendChild(msgDiv);
+            chatWindow.appendChild(div);
             chatWindow.scrollTop = chatWindow.scrollHeight;
-            return msgDiv;
+            return div;
         }
     </script>
 </body>
