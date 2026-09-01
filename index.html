@@ -2,64 +2,432 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>বাচ্চাদের এআই শিক্ষক</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>বাচ্চাদের এআই শিক্ষক - লগইন</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2196F3;
+            --bg-color: #f0f8ff;
+            --text-color: #333;
+            --card-bg: #fff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        /* Responsive scaling on very small screens */
+        @media (max-width: 360px) {
+            .container { padding: 1.5rem; }
+            h2 { font-size: 1.5rem; }
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            margin-top: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover { background-color: #43a047; }
+        .btn-primary:active { transform: scale(0.98); }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+            margin-top: 0.5rem;
+        }
+
+        #teacher-interface { display: none; }
+        
+        /* Chat Interface Styles */
+        .chat-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+        }
+
+        #chat-window {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            background: #fafafa;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background-color: #e3f2fd;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .ai-message {
+            background-color: #e8f5e9;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #777;
+            padding: 5px;
+            transition: color 0.3s;
+        }
+
+        .icon-btn:hover { color: var(--secondary-color); }
+        .icon-btn.recording { color: red; animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        #image-preview {
+            max-width: 100px;
+            max-height: 100px;
+            display: none;
+            margin-top: 10px;
+            border-radius: 10px;
+        }
+
+    </style>
 </head>
 <body>
 
-    <div style="text-align: center; margin-top: 50px;">
-        <h2>🎈 এআই শিক্ষক 🎈</h2>
-        <p>যেকোনো প্রশ্ন করো, সহজ করে বুঝিয়ে দেব!</p>
+    <div id="login-interface" class="container">
+        <h2 id="login-title">🔒 প্রথমবার সেটআপ</h2>
+        
+        <div class="input-group">
+            <label for="reg-id">লগইন আইডি:</label>
+            <input type="text" id="reg-id" placeholder="id123">
+        }
+        
+        <div class="input-group">
+            <label for="reg-pass">পাসওয়ার্ড সেট করো:</label>
+            <input type="password" id="reg-pass" placeholder="****">
+        }
 
-        <input type="text" id="userQuestion" placeholder="প্রশ্ন লিখুন..." style="padding: 10px; width: 60%;">
-        <button onclick="askAI()" style="padding: 10px 20px; background-color: #e06666; color: white; border: none; cursor: pointer;">উত্তর দাও</button>
+        <button id="auth-btn" class="btn btn-primary">সেটআপ করো</button>
+        <button id="logout-clear-btn" class="btn btn-secondary" style="display: none;">লগআউট ও তথ্য মুছো</button>
+        <p id="login-msg" style="color: red; margin-top: 10px;"></p>
+    </div>
 
-        <p id="responseArea" style="margin-top: 20px; font-weight: bold;"></p>
+    <div id="teacher-interface" class="container chat-container">
+        <h2>🧑‍🏫 এআই শিক্ষক</h2>
+        
+        <div id="chat-window">
+            <div class="message ai-message">হ্যালো! আমি তোমার এআই শিক্ষক। তুমি আমাকে প্রশ্ন করতে পারো, ছবি দেখাতে পারো বা মুখে বলেও সার্চ করতে পারো!</div>
+        </div>
+
+        <img id="image-preview" src="#" alt="ছবি প্রিভিউ">
+
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="এখানে প্রশ্ন লেখো...">
+            
+            <button id="voice-btn" class="icon-btn" title="ভয়েস টাইপ">🎙️</button>
+            
+            <label for="image-input" class="icon-btn" title="ছবি তোলো বা আপলোড করো">📷</label>
+            <input type="file" id="image-input" accept="image/*" style="display: none;">
+
+            <button id="send-btn" class="icon-btn" style="color: var(--primary-color);">➡️</button>
+        </div>
     </div>
 
     <script>
-    async function askAI() {
-        const questionInput = document.getElementById("userQuestion").value;
-        const responseArea = document.getElementById("responseArea");
+        // --- Configuration ---
+        // আপনার Netlify Function URL টি এখানে দিন
+        const NETLIFY_FUNCTION_URL = "https://your-netlify-app.netlify.app/.netlify/functions/gemini";
 
-        if (!questionInput) {
-            alert("অনুগ্রহ করে একটি প্রশ্ন লিখুন!");
-            return;
+        // --- Auth Logic ---
+        const loginInterface = document.getElementById('login-interface');
+        const teacherInterface = document.getElementById('teacher-interface');
+        const loginTitle = document.getElementById('login-title');
+        const regIdInput = document.getElementById('reg-id');
+        const regPassInput = document.getElementById('reg-pass');
+        const authBtn = document.getElementById('auth-btn');
+        const logoutClearBtn = document.getElementById('logout-clear-btn');
+        const loginMsg = document.getElementById('login-msg');
+
+        // Check if user is already registered and logged in
+        const storedUser = localStorage.getItem('kids_teacher_user');
+        if (storedUser) {
+            loginTitle.textContent = "👋 আবার স্বাগতম!";
+            authBtn.textContent = "লগইন করো";
+            logoutClearBtn.style.display = "block";
         }
 
-        responseArea.innerText = "উত্তর তৈরি হচ্ছে, একটু অপেক্ষা করুন...";
+        authBtn.addEventListener('click', () => {
+            const id = regIdInput.value.trim();
+            const pass = regPassInput.value.trim();
 
-        // আপনার আসল Gemini API Key-টি নিচের কোটেশনের ভেতরে বসান
-        const apiKey = "AIzaSyCg5ttOQHcdqupwlD9lDam6IFfh6P1mdos"; 
+            if (!id || !pass) {
+                loginMsg.textContent = "আইডি এবং পাসওয়ার্ড দুটোই দাও।";
+                return;
+            }
 
-        const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey;
+            if (storedUser) {
+                // Login mode
+                const user = JSON.parse(storedUser);
+                if (user.id === id && user.pass === pass) {
+                    loginInterface.style.display = "none";
+                    teacherInterface.style.display = "flex";
+                } else {
+                    loginMsg.textContent = "ভুল আইডি বা পাসওয়ার্ড!";
+                }
+            } else {
+                // Registration mode
+                const newUser = { id, pass };
+                localStorage.setItem('kids_teacher_user', JSON.stringify(newUser));
+                loginMsg.textContent = "সেটআপ সফল! এখন লগইন বোতামে ক্লিক করো।";
+                authBtn.textContent = "লগইন করো";
+                loginTitle.textContent = "👋 স্বাগতম!";
+                // Refresh storedUser to enable login mode
+                storedUser = localStorage.getItem('kids_teacher_user');
+            }
+        });
 
-        try {
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{ text: questionInput }]
-                    }]
-                })
+        logoutClearBtn.addEventListener('click', () => {
+            localStorage.removeItem('kids_teacher_user');
+            location.reload();
+        });
+
+
+        // --- Chat & API Logic ---
+        const chatWindow = document.getElementById('chat-window');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const voiceBtn = document.getElementById('voice-btn');
+        const imageInput = document.getElementById('image-input');
+        const imagePreview = document.getElementById('image-preview');
+
+        let selectedImageBase64 = null;
+
+        // Image Handling
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                selectedImageBase64 = event.target.result.split(',')[1]; // Get base64 only
+                imagePreview.src = event.target.result;
+                imagePreview.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Voice Input (Web Speech API)
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'bn-BD'; // Set language to Bengali
+
+            voiceBtn.addEventListener('click', () => {
+                if (voiceBtn.classList.contains('recording')) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                }
             });
 
-            const data = await response.json();
+            recognition.onstart = () => {
+                voiceBtn.classList.add('recording');
+                voiceBtn.textContent = "🛑"; // Stop icon
+            };
 
-            if (response.ok) {
-                const answer = data.candidates[0].content.parts[0].text;
-                responseArea.innerText = answer;
-            } else {
-                responseArea.innerText = "এরর: " + (data.error?.message || "উত্তর পাওয়া যায়নি");
-            }
-        } catch (err) {
-            responseArea.innerText = "নেটওয়ার্ক কানেকশনে সমস্যা হয়েছে।";
+            recognition.onend = () => {
+                voiceBtn.classList.remove('recording');
+                voiceBtn.textContent = "🎙️";
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                userInput.value = transcript;
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Speech recognition error:", event.error);
+                voiceBtn.classList.remove('recording');
+                voiceBtn.textContent = "🎙️";
+            };
+        } else {
+            voiceBtn.style.display = "none";
+            console.warn("Speech Recognition API not supported in this browser.");
         }
-    }
-    </script>
 
+
+        // Sending messages
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        async function sendMessage() {
+            const prompt = userInput.value.trim();
+            if (!prompt && !selectedImageBase64) return;
+
+            // Add user message to chat
+            appendMessage('user', prompt, selectedImageBase64 ? imagePreview.src : null);
+            userInput.value = '';
+            imagePreview.style.display = "none";
+            const currentImage = selectedImageBase64;
+            selectedImageBase64 = null; // Clear selected image
+
+            // Show loading message
+            const loadingMsg = appendMessage('ai', 'ভেবে বলছি...');
+
+            try {
+                // Call Netlify Function
+                const response = await fetch(NETLIFY_FUNCTION_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ 
+                        prompt, 
+                        image: currentImage 
+                    })
+                });
+
+                const data = await response.json();
+
+                // Remove loading message
+                loadingMsg.remove();
+
+                if (!response.ok) {
+                    appendMessage('ai', 'দুঃখিত, কোনো সমস্যা হয়েছে: ' + (data.error || 'অজানা ত্রুটি'));
+                    return;
+                }
+
+                // Append AI Response
+                const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "আমি ঠিক বুঝতে পারিনি।";
+                appendMessage('ai', aiText);
+
+            } catch (error) {
+                loadingMsg.remove();
+                appendMessage('ai', 'দুঃখিত, সংযোগ করতে সমস্যা হয়েছে। আবার চেষ্টা করো।');
+                console.error("Fetch error:", error);
+            }
+        }
+
+        function appendMessage(sender, text, imgSrc = null) {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message');
+            msgDiv.classList.add(sender === 'user' ? 'user-message' : 'ai-message');
+
+            if (imgSrc) {
+                const img = document.createElement('img');
+                img.src = imgSrc;
+                img.style.maxWidth = "100%";
+                img.style.borderRadius = "10px";
+                img.style.marginBottom = "5px";
+                msgDiv.appendChild(img);
+            }
+
+            if (text) {
+                const textNode = document.createElement('span');
+                textNode.textContent = text;
+                msgDiv.appendChild(textNode);
+            }
+
+            chatWindow.appendChild(msgDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to bottom
+            return msgDiv; // Return for easy removal (loading msg)
+        }
+    </script>
 </body>
 </html>
