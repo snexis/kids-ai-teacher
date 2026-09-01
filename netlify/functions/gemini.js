@@ -19,7 +19,7 @@ exports.handler = async function (event, context) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      return { statusCode: 500, headers, body: JSON.stringify({ error: "API Key পাওয়া যায়নি।" }) };
+      return { statusCode: 500, headers, body: JSON.stringify({ error: "API Key পাওয়া যায়নি।" }) };
     }
 
     const parts = [];
