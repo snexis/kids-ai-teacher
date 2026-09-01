@@ -1,5 +1,3 @@
-const fetch = require('node-fetch'); // Ensure node-fetch is available
-
 exports.handler = async function (event, context) {
   const headers = {
     "Access-Control-Allow-Origin": "*",
@@ -8,23 +6,29 @@ exports.handler = async function (event, context) {
     "Content-Type": "application/json"
   };
 
-  if (event.httpMethod === "OPTIONS") return { statusCode: 200, headers, body: "" };
-  if (event.httpMethod !== "POST") return { statusCode: 405, headers, body: JSON.stringify({ error: "Method Not Allowed" }) };
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 200, headers, body: "" };
+  }
+
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, headers, body: JSON.stringify({ error: "Method Not Allowed" }) };
+  }
 
   try {
-    const { prompt, image } = JSON.parse(event.body || "{}"); // Parse 'image' as base64
+    const { prompt, image } = JSON.parse(event.body || "{}");
     const apiKey = process.env.GEMINI_API_KEY;
 
-    if (!apiKey) return { statusCode: 500, headers, body: JSON.stringify({ error: "API key Netlify-তে সেট করা নেই।" }) };
-    if (!prompt && !image) return { statusCode: 400, headers, body: JSON.stringify({ error: "প্রম্পট বা ছবি দেওয়া হয়নি।" }) };
+    if (!apiKey) {
+      return { statusCode: 500, headers, body: JSON.stringify({ error: "API Key পাওয়া যায়নি।" }) };
+    }
 
-    // Payload for multimodal request
-    const parts = [{ text: prompt || "আমাকে এই ছবি সম্পর্কে বলো।" }];
+    const parts = [];
+    if (prompt) parts.push({ text: prompt });
     if (image) {
       parts.push({
         inlineData: {
-          data: image, // Base64 image data
-          mimeType: "image/jpeg" // Adjust based on input if needed (simple assumption here)
+          data: image,
+          mimeType: "image/jpeg"
         }
       });
     }
@@ -39,7 +43,10 @@ exports.handler = async function (event, context) {
     );
 
     const data = await response.json();
-    if (!response.ok) return { statusCode: response.status, headers, body: JSON.stringify({ error: data.error?.message || "Gemini API error" }) };
+
+    if (!response.ok) {
+      return { statusCode: response.status, headers, body: JSON.stringify({ error: data.error?.message || "Gemini API Error" }) };
+    }
 
     return { statusCode: 200, headers, body: JSON.stringify(data) };
   } catch (error) {
